@@ -23,12 +23,15 @@
     "content_scripts": [
         {
             "js": [
-                "scripts/script.js"
+                "content.js"
             ],
             "matches": [
-                "https://*/"
+                "https://*/*"
             ]
         }
     ],
-    "permissions": ["activeTab", "scripting"]
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ]
 }
