@@ -26,12 +26,18 @@
                 "content.js"
             ],
             "matches": [
-                "https://*/*"
+                "<all_urls>"
             ]
         }
     ],
     "permissions": [
         "activeTab",
         "scripting"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["/images/*"],
+            "matches": ["<all_urls>"]
+        }
     ]
 }
