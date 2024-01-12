@@ -1,3 +1,5 @@
+const C = document.createElement('canvas')
+
 const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
     const { top, left, bottom, right } = el.getBoundingClientRect();
     const { innerHeight, innerWidth } = window;
@@ -8,8 +10,15 @@ const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
         : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
 };
 
-function onionClickHandler() {
-    console.log("Oño!")
+function addPikminToCanvas() {
+    const pikmin = new Image()
+    pikmin.onload = () => { ctx.drawImage(pikmin, 10, 10) }
+    pikmin.src = chrome.runtime.getURL('./images/red-pikmin.webp')
+    pikmin.style.height = "20px"
+    pikmin.style.width = "auto"
+    console.log(`pikmin height:${pikmin.style.height}`)
+    const ctx = C.getContext('2d')
+    ctx.drawImage(pikmin, 100, 100)
 }
 
 function attachOnion() {
@@ -22,21 +31,20 @@ function attachOnion() {
     onion.style.height = "150px"
     onion.style.width = "auto"
 
-    onion.addEventListener('click', onionClickHandler)
+    onion.addEventListener('click', addPikminToCanvas)
     
     document.body.prepend(onion)
 }
 
 function attachCanvas() {
-    const canvas = document.createElement('canvas')
-    canvas.style.zIndex = "9999"
-    canvas.style.pointerEvents = "none"
-    canvas.style.position = "absolute"
-    canvas.style.height = "100%"
-    canvas.style.width = "100%"
-    canvas.style.inset = "0"
+    C.style.zIndex = "9999"
+    C.style.pointerEvents = "none"
+    C.style.position = "absolute"
+    C.style.height = "100%"
+    C.style.width = "100%"
+    C.style.inset = "0"
 
-    document.body.append(canvas)
+    document.body.append(C)
 }
 
 function run() {
@@ -44,8 +52,8 @@ function run() {
 
     const visibleImages = [...allImages].filter(image => elementIsVisibleInViewport(image))
     console.log(visibleImages)
-    attachOnion()
     attachCanvas()
+    attachOnion()
 }
 
 run()
