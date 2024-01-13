@@ -6,6 +6,19 @@ const CTX = C.getContext('2d')
 const ONION_WIDTH = 180
 const ONION_HEIGHT = 150
 
+const PIKMIN_ARMY = []
+
+class Sprite {
+    constructor({ position, image }){
+        this.position = position
+        this.image = image
+    }
+
+    draw() {
+        CTX.drawImage(this.image, this.position.x, this.position.y, 20, 25)
+    }
+}
+
 const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
     const { top, left, bottom, right } = el.getBoundingClientRect();
     const { innerHeight, innerWidth } = window;
@@ -16,14 +29,19 @@ const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
         : top >= 0 && left >= 0 && bottom <= innerHeight && right <= innerWidth;
 };
 
-function addPikminToCanvas() {
-    const pikmin = new Image()
-    pikmin.onload = () => {
-        randomX = Math.floor(Math.random() * ONION_WIDTH)
-        randomY = Math.floor(Math.random() * ONION_HEIGHT)
-        CTX.drawImage(pikmin, randomX, randomY, 20, 25)
+function addPikminToCanvas() {    
+    const pikminImage = new Image()
+    pikminImage.onload = () => {
+        const pikmin = new Sprite({
+            position:{
+                x: Math.floor(Math.random() * ONION_WIDTH),
+                y: Math.floor(Math.random() * ONION_HEIGHT)
+            },
+            image: pikminImage
+        })
+        PIKMIN_ARMY.push(pikmin)
     }
-    pikmin.src = chrome.runtime.getURL('./images/red-pikmin.png')
+    pikminImage.src = chrome.runtime.getURL('./images/red-pikmin.png')
 }
 
 function attachOnion() {
@@ -48,11 +66,21 @@ function attachCanvas() {
     C.style.inset = "0"
 
     document.body.append(C)
+
+    animate()
+}
+
+function animate(){
+    // Grab ref to animation ID, might use later
+    const animationId = window.requestAnimationFrame(animate)
+    console.log("Hello! Running loop")
+    for(pikmin of PIKMIN_ARMY){
+        pikmin.draw()
+    }
 }
 
 function run() {
     const allImages = document.querySelectorAll("img")
-
     const visibleImages = [...allImages].filter(image => elementIsVisibleInViewport(image))
     console.log(visibleImages)
     attachCanvas()
