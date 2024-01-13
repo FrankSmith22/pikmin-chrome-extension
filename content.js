@@ -41,7 +41,7 @@ class PikminSprite extends Sprite {
             }
             else {
                 this.bobIndex++
-                this.position.y = this.bobStart + this.BOB_ANIMATION[this.bobIndex]
+                this.position.y = this.bobStart - this.BOB_ANIMATION[this.bobIndex]
             }
         }
         else {
@@ -52,7 +52,7 @@ class PikminSprite extends Sprite {
                 // Begin bobbing animation
                 this.isBobbing = true
                 this.bobIndex = 0
-                this.position.y = this.bobStart + this.BOB_ANIMATION[this.bobIndex]
+                this.position.y = this.bobStart - this.BOB_ANIMATION[this.bobIndex]
             }
         }
         super.draw()
