@@ -3,6 +3,9 @@ C.width=document.body.clientWidth
 C.height=document.body.clientHeight
 const CTX = C.getContext('2d')
 
+const ONION_WIDTH = 180
+const ONION_HEIGHT = 150
+
 const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
     const { top, left, bottom, right } = el.getBoundingClientRect();
     const { innerHeight, innerWidth } = window;
@@ -16,7 +19,9 @@ const elementIsVisibleInViewport = (el, partiallyVisible = false) => {
 function addPikminToCanvas() {
     const pikmin = new Image()
     pikmin.onload = () => {
-        CTX.drawImage(pikmin, 0, 0, 20, 25)
+        randomX = Math.floor(Math.random() * ONION_WIDTH)
+        randomY = Math.floor(Math.random() * ONION_HEIGHT)
+        CTX.drawImage(pikmin, randomX, randomY, 20, 25)
     }
     pikmin.src = chrome.runtime.getURL('./images/red-pikmin.png')
 }
@@ -28,8 +33,8 @@ function attachOnion() {
     onion.style.position = "absolute"
     onion.style.top = "0"
     onion.style.left = "0"
-    onion.style.height = "150px"
-    onion.style.width = "auto"
+    onion.style.height = `${ONION_HEIGHT}px`
+    onion.style.width = `${ONION_WIDTH}px`
 
     onion.addEventListener('click', addPikminToCanvas)
     
