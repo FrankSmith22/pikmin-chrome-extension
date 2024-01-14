@@ -77,8 +77,10 @@ function run() {
     const visibleImages = [...allImages].filter(image => elementIsVisibleInViewport(image))
     TARGETS = visibleImages.map(image => {
         const imageRect = image.getBoundingClientRect().toJSON()
-        imageRect.x += 100
-        imageRect.y += 100
+        // Debugging lines to ensure image is getting redrawn
+        // imageRect.x += 100
+        // imageRect.y += 100
+        image.style.display = "none"
         return new Target({...imageRect, image })
     })
     attachCanvas()
