@@ -23,6 +23,7 @@
     "content_scripts": [
         {
             "js": [
+                "classes.js",
                 "content.js"
             ],
             "matches": [
