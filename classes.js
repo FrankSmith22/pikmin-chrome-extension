@@ -27,12 +27,17 @@ class PikminSprite extends Sprite {
         super({ position, image, width, height })
         this.bobStart = position.y // Make sure this is set as pikmin moves around the screen
         this.bobIndex = null
+        this.travelling = false
+        this.isAttacking = false
         
         // Looks crazy, but this is a list of the pixels away from bobStart to animate while bobbing
         this.BOB_ANIMATION = [1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1]
+
+        setTimeout(() => this.travelling = { x: 400, y: 400 }, 1000) // Default delay time of 1 sec before pikmin moves away from onion
     }
-    
-    draw() {
+
+    handleBobbing() {
+        // if(this.travelling) return;
         // First, if pikmin is already bobbing
         if(this.bobIndex !== null){
             if(this.bobIndex === this.BOB_ANIMATION.length - 1){
@@ -48,7 +53,6 @@ class PikminSprite extends Sprite {
         else {
             // Randomly decide if pikmin should animate. Make it 2% chance
             const shouldBob = Math.floor(Math.random() * 100) <= 1 //(True == 0 or 1)
-            console.log(`should bob: ${shouldBob}`)
             if(shouldBob){
                 // Begin bobbing animation
                 this.isBobbing = true
@@ -56,6 +60,29 @@ class PikminSprite extends Sprite {
                 this.position.y = this.bobStart - this.BOB_ANIMATION[this.bobIndex]
             }
         }
+    }
+
+    handleTravelling() {
+        if(!this.travelling) return;
+        // Do the math to find the x and y difference between
+        // where the pikmin is now, and where we want to move it
+        const xDifference = this.travelling.x - this.position.x
+        const yDifference = this.travelling.y - this.bobStart
+        if(this.position.x === this.travelling.x || this.position.y === this.travelling.y){
+            console.log('Reached destination!')
+            this.travelling = false
+            return
+        }
+        console.log(xDifference)
+        console.log(yDifference)
+        this.position.x++
+        this.position.y++
+        this.bobStart++
+    }
+    
+    draw() {
+        this.handleBobbing()
+        this.handleTravelling()
         super.draw()
     }
 }
